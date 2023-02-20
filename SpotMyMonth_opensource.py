@@ -63,7 +63,7 @@ class PlaylistGeneratorGUI:
         self.generate_button = st.button("Generate Playlists", key = "generate_button")
 
         if self.generate_button:
-            self.generate_playlists('CLIENT_ID', 'CLIENT_SECRET', and 'REDIRECT_URI')
+            self.generate_playlists('CLIENT_ID', 'CLIENT_SECRET', 'REDIRECT_URI')
 
     def generate_playlists(self, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI):
         # Set up client credentials
