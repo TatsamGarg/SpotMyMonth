@@ -13,9 +13,7 @@ import spotipy.util as util
 from spotipy.oauth2 import SpotifyOAuth
 from datetime import datetime, timedelta
 import os
-CLIENT_ID = os.environ.get('CLIENT_ID')
-CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
-REDIRECT_URI = os.environ.get('REDIRECT_URI')
+
 class PlaylistGeneratorGUI:
     def __init__(self):
         self.username_input = None
@@ -66,13 +64,13 @@ class PlaylistGeneratorGUI:
         self.generate_button = st.button("Generate Playlists", key = "generate_button")
 
         if self.generate_button:
-            self.generate_playlists('CLIENT_ID', 'CLIENT_SECRET', 'REDIRECT_URI')
+            self.generate_playlists()
 
-    def generate_playlists(self, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI):
+    def generate_playlists(self):
         # Set up client credentials
-        CLIENT_ID = CLIENT_ID
-        CLIENT_SECRET = CLIENT_SECRET
-        REDIRECT_URI = REDIRECT_URI 
+        CLIENT_ID = os.environ.get('CLIENT_ID')
+        CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
+        REDIRECT_URI = os.environ.get('REDIRECT_URI')
 
         # Define the scope of the permissions you need
         SCOPE = 'user-library-read playlist-modify-public'
