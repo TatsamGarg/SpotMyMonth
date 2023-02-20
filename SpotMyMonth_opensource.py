@@ -78,11 +78,19 @@ class PlaylistGeneratorGUI:
         # Replace this with the Spotify username of the user you are making requests on behalf of
         USERNAME = self.username_input
 
-        # Redirect the user to the Spotify authorization page
-        token = util.prompt_for_user_token(USERNAME, SCOPE, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI) # this makes a .cache file
+        # Create a link that the user can click to authenticate with Spotify
+        auth_url = util.prompt_for_user_token(USERNAME, SCOPE, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
+        st.write("To authenticate with Spotify, please click [here](" + auth_url + ")")
 
-        # Use the token to make API requests
-        sp = spotipy.Spotify(auth=token)
+        # Wait for the user to click the link and be redirected
+        params = st.experimental_get_query_params()
+        if 'code' in params:
+            # Use the authorization code to retrieve an access token
+            code = params['code'][0]
+            token = util.oauth2.SpotifyOAuth(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI).get_access_token(code)
+            # Use the token to make API requests
+            sp = spotipy.Spotify(auth=token)
+            st.write("Authenticated successfully!")
 
         # get the start and end months from the inputs
         start_month_str = self.start_month_input
