@@ -1,5 +1,9 @@
 import streamlit as st
+import calendar
+import spotipy
 import spotipy.util as util
+from spotipy.oauth2 import SpotifyOAuth
+from datetime import datetime, timedelta
 import os
 
 def callback():
@@ -10,7 +14,7 @@ def callback():
     code = st.experimental_get_query_params().get("code")
 
     if code:
-        token = util.oauth2.SpotifyOAuth(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI).get_access_token(code)
+        token = SpotifyOAuth(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI).get_access_token(code)
         st.write("Authenticated successfully!")
         # Do something with the access token, like call the Spotify API
     else:
