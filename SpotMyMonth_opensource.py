@@ -84,7 +84,7 @@ class PlaylistGeneratorGUI:
 
         # Obtain authorization URL
         auth_url = sp_oauth.get_authorize_url()
-        st.write(auth_url)
+        st.write(f'<a target="_self" href="{auth_url}"><button>Please login via Google</button></a>', unsafe_allow_html=True)
 
         # Obtain access token and refresh token programmatically
         token_info = sp_oauth.get_access_token()
