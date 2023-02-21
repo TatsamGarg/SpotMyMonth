@@ -88,7 +88,7 @@ class PlaylistGeneratorGUI:
         USERNAME = self.username_input
 
         # Check if we have a Spotify access token
-        if 'spotify_token' not in st.session_state:
+        while 'spotify_token' not in st.session_state:
             # If not, create a link that the user can click to authenticate with Spotify
             sp_oauth = SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=SCOPE)
             # Obtain authorization URL
@@ -104,10 +104,10 @@ class PlaylistGeneratorGUI:
                 token = sp_oauth.get_access_token(code)
                 st.session_state['spotify_token'] = token
                 st.write("Authenticated successfully!")
-        else:
-            # If we already have a Spotify access token, use it to make API requests
-            sp = spotipy.Spotify(auth=st.session_state['spotify_token'])
-            st.write("Authenticated with saved token!")
+       
+        # If we already have a Spotify access token, use it to make API requests
+        sp = spotipy.Spotify(auth=st.session_state['spotify_token'])
+        st.write("Authenticated with saved token!")
 
 
         # get the start and end months from the inputs
