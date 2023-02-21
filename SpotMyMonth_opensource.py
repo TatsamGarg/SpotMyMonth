@@ -71,7 +71,10 @@ class PlaylistGeneratorGUI:
         CLIENT_ID = os.environ.get('CLIENT_ID')
         CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
         REDIRECT_URI = os.environ.get('REDIRECT_URI')
-
+        
+        st.write("Your secrets are")
+        st.write(CLIENT_ID, CLIENT_SECRET)
+        
         # Define the scope of the permissions you need
         SCOPE = 'user-library-read playlist-modify-public'
 
