@@ -22,6 +22,8 @@ class PlaylistGeneratorGUI:
         self.generate_button = None
 
     def run(self):
+        st.set_theme("dark")
+        
         st.title(":green[SpotMyMonth] :fallen_leaf:")
         
 
