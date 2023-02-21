@@ -79,24 +79,27 @@ class PlaylistGeneratorGUI:
         # Replace this with the Spotify username of the user you are making requests on behalf of
         USERNAME = self.username_input
 
-        # Create SpotifyOAuth object
-        sp_oauth = SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=SCOPE)
+        # Check if we have a Spotify access token
+        if 'spotify_token' not in st.session_state:
+            # If not, create a link that the user can click to authenticate with Spotify
+            sp_oauth = SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=SCOPE)
+            # Obtain authorization URL
+            auth_url = sp_oauth.get_authorize_url()
+            st.write(f'<a href="{auth_url}">Click here to authenticate with Spotify</a>', unsafe_allow_html=True)
+            st.write(auth_url)
 
-        # Obtain authorization URL
-        auth_url = sp_oauth.get_authorize_url()
-
-        st.write(f'<a target="_self" href="{auth_url}"><button>Please login via Spotify</button></a>', unsafe_allow_html=True)
-        st.write(auth_url)
-
-        # Obtain access token and refresh token programmatically
-        token_info = sp_oauth.get_access_token()
-        access_token = token_info['access_token']
-        refresh_token = token_info['refresh_token']
-        expires_in = token_info['expires_in']
-
-        # Use the access token to make API requests
-        sp = spotipy.Spotify(auth=access_token)
-        st.write("Authenticated successfully!")
+            # Wait for the user to click the link and be redirected
+            params = st.experimental_get_query_params()
+            if 'code' in params:
+                # Use the authorization code to retrieve an access token
+                code = params['code'][0]
+                token = util.oauth2.SpotifyOAuth(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI).get_access_token(code)
+                st.session_state['spotify_token'] = token
+                st.write("Authenticated successfully!")
+        else:
+            # If we already have a Spotify access token, use it to make API requests
+            sp = spotipy.Spotify(auth=st.session_state['spotify_token'])
+            st.write("Authenticated with saved token!")
 
 
         # get the start and end months from the inputs
