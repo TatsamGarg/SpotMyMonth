@@ -93,7 +93,7 @@ class PlaylistGeneratorGUI:
             if 'code' in params:
                 # Use the authorization code to retrieve an access token
                 code = params['code'][0]
-                token = util.oauth2.SpotifyOAuth(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI).get_access_token(code)
+                token = sp_oauth.get_access_token(code)
                 st.session_state['spotify_token'] = token
                 st.write("Authenticated successfully!")
         else:
