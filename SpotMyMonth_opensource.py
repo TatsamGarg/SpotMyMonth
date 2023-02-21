@@ -13,7 +13,7 @@ import spotipy.util as util
 from spotipy.oauth2 import SpotifyOAuth
 from datetime import datetime, timedelta
 import os
-import callback
+#import callback
 
 class PlaylistGeneratorGUI:
     def __init__(self):
