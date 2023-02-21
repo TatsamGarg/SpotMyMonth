@@ -81,7 +81,8 @@ class PlaylistGeneratorGUI:
         # Create a link that the user can click to authenticate with Spotify
         auth_url = util.prompt_for_user_token(USERNAME, SCOPE, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
         #st.write("To authenticate with Spotify, please click [here](" + auth_url + ")")
-        st.write(f'''<a target="_self" href=auth_url><button>Please login via Google</button></a>''',unsafe_allow_html=True)
+        st.write(auth_url)
+        st.write(f'<a target="_self" href="{auth_url}"><button>Please login via Google</button></a>', unsafe_allow_html=True)
 
         # Wait for the user to click the link and be redirected
         params = st.experimental_get_query_params()
