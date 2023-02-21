@@ -79,22 +79,22 @@ class PlaylistGeneratorGUI:
         # Replace this with the Spotify username of the user you are making requests on behalf of
         USERNAME = self.username_input
 
-        # Create SpotifyOAuth object
-        sp_oauth = SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=SCOPE)
+        # Create a link that the user can click to authenticate with Spotify
+        auth_url = util.prompt_for_user_token(USERNAME, SCOPE, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
+        #st.write("To authenticate with Spotify, please click [here](" + auth_url + ")")
+        st.write(auth_url)
+        st.write(f'<a target="_self" href="{auth_url}"><button>Please login via Google</button></a>', unsafe_allow_html=True)
 
-        # Obtain authorization URL
-        auth_url = sp_oauth.get_authorize_url()
-        st.write(f'<a target="_self" href="{auth_url}"><button>Please login via Spotify</button></a>', unsafe_allow_html=True)
+        # Wait for the user to click the link and be redirected
+        params = st.experimental_get_query_params()
+        if 'code' in params:
+            # Use the authorization code to retrieve an access token
+            code = params['code'][0]
+            token = util.oauth2.SpotifyOAuth(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI).get_access_token(code)
+            # Use the token to make API requests
+            sp = spotipy.Spotify(auth=token)
+            st.write("Authenticated successfully!")
 
-        # Obtain access token and refresh token programmatically
-        token_info = sp_oauth.get_access_token()
-        access_token = token_info['access_token']
-        refresh_token = token_info['refresh_token']
-        expires_in = token_info['expires_in']
-
-        # Use the access token to make API requests
-        sp = spotipy.Spotify(auth=access_token)
-        st.write("Authenticated successfully!")
 
         # get the start and end months from the inputs
         start_month_str = self.start_month_input
