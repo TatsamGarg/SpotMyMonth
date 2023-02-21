@@ -13,6 +13,7 @@ import spotipy.util as util
 from spotipy.oauth2 import SpotifyOAuth
 from datetime import datetime, timedelta
 import os
+from pages import callback
 
 class PlaylistGeneratorGUI:
     def __init__(self):
@@ -22,10 +23,17 @@ class PlaylistGeneratorGUI:
         self.generate_button = None
 
     def run(self):
-        
+        st.sidebar.title("Navigation")
+        app_mode = st.sidebar.selectbox("Choose a page", ["Homepage", "Callback"])
+        if app_mode == "Homepage":
+            # Display your app's homepage
+            pass
+        elif app_mode == "Callback":
+            # Display the callback page
+            callback.callback()
+            
+            
         st.title(":green[SpotMyMonth] :fallen_leaf:")
-        
-
         st.markdown("<h2 style='text-align: left; font-size: 30px; color: white;'> Playlist Generator </h2>", unsafe_allow_html=True)
         
         st.write("") # Add a blank line here
