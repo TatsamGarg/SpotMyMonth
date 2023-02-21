@@ -23,14 +23,14 @@ class PlaylistGeneratorGUI:
         self.generate_button = None
 
     def run(self):
-        st.sidebar.title("Navigation")
-        app_mode = st.sidebar.selectbox("Choose a page", ["Homepage", "Callback"])
-        if app_mode == "Homepage":
+        #st.sidebar.title("Navigation")
+        #app_mode = st.sidebar.selectbox("Choose a page", ["Homepage", "Callback"])
+        #if app_mode == "Homepage":
             # Display your app's homepage
-            pass
-        elif app_mode == "Callback":
+       #     pass
+       # elif app_mode == "Callback":
             # Display the callback page
-            callback.callback()
+        #    callback.callback()
             
             
         st.title(":green[SpotMyMonth] :fallen_leaf:")
