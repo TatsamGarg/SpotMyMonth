@@ -20,7 +20,7 @@ class PlaylistGeneratorGUI:
         self.start_month_input = None
         self.end_month_input = None
         self.generate_button = None
-        
+
     def run(self):
 
         st.title(":green[SpotMyMonth] :fallen_leaf:")
@@ -66,26 +66,26 @@ class PlaylistGeneratorGUI:
 
         if self.generate_button:
             self.generate_playlists()
-        
+
     def generate_playlists(self):
         # Set up client credentials
         CLIENT_ID = os.environ.get('CLIENT_ID')
         CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
         REDIRECT_URI = os.environ.get('REDIRECT_URI')
-     
+        CLIENT_ID = "3b3deafb7d7d406aa51795a98d044546"
+        CLIENT_SECRET = "edf00b855b164f62bcca60cec5ba33c4"
+        REDIRECT_URI = "http://localhost:8888/callback"
         # Define the scope of the permissions you need
         SCOPE = 'user-library-read playlist-modify-public'
 
         # Replace this with the Spotify username of the user you are making requests on behalf of
         USERNAME = self.username_input
-        
-        # Set up authentication
-        auth_manager = SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=SCOPE)
+
         # Redirect the user to the Spotify authorization page
-        auth_url = auth_manager.get_authorize_url()
-        st.write(auth_url)
-        access_token=auth_manager.get_cached_token()['access_token']
-        sp = spotipy.Spotify(auth=access_token)
+        token = util.prompt_for_user_token(USERNAME, SCOPE, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI) # this makes a .cache file
+
+        # Use the token to make API requests
+        sp = spotipy.Spotify(auth=token)
 
         # get the start and end months from the inputs
         start_month_str = self.start_month_input
@@ -132,13 +132,13 @@ class PlaylistGeneratorGUI:
                     break
             else:
                 existing_playlist = None
-
+            
             # create or update the playlist
             if existing_playlist:
                 existing_playlist_tracks = [track['track'] for track in sp.playlist_tracks(existing_playlist['id'])['items']]
                 existing_track_uris = [track['uri'] for track in existing_playlist_tracks]
                 new_track_uris = list(set(track_uris) - set(existing_track_uris))
-
+            
                 if len(new_track_uris)==0:
                     st.write(f"Playlist '{playlist_name}' already exists and was updated with {len(new_track_uris)} tracks!")
                 else :
@@ -147,9 +147,8 @@ class PlaylistGeneratorGUI:
             else:
                 playlist = sp.user_playlist_create(user=sp.me()['id'], name=playlist_name)
                 sp.user_playlist_add_tracks(user=sp.me()['id'], playlist_id=playlist['id'], tracks=track_uris)
-                st.write(f"Playlist '{playlist_name}' created with {len(track_uris)} tracks!") 
+                st.write(f"Playlist '{playlist_name}' created with {len(track_uris)} tracks!")
 
-       
 if __name__ == "__main__":
     playlist_generator_gui = PlaylistGeneratorGUI()
     playlist_generator_gui.run()
