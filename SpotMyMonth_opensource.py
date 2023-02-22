@@ -68,7 +68,7 @@ class PlaylistGeneratorGUI:
 
         if self.generate_button:
             self.generate_playlists()
-            @self.app.route('/callback')    
+            # @self.app.route('/callback')    
             def callback(self):
                 # Extract the code from the redirect URI
                 code = request.args.get('code')
