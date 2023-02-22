@@ -22,7 +22,7 @@ class PlaylistGeneratorGUI:
         self.end_month_input = None
         self.generate_button = None
         self.app = Flask(__name__) 
-        @app.route('/callback')
+        @self.app.route('/callback')
         
         def callback(self):
             # Extract the code from the redirect URI
