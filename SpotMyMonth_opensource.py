@@ -21,7 +21,7 @@ class PlaylistGeneratorGUI:
         self.start_month_input = None
         self.end_month_input = None
         self.generate_button = None
-
+        self.app = Flask(__name__) 
     def run(self):
 
         st.title(":green[SpotMyMonth] :fallen_leaf:")
@@ -86,7 +86,7 @@ class PlaylistGeneratorGUI:
         # Redirect the user to the Spotify authorization page
         auth_url = auth_manager.get_authorize_url()
         st.write(auth_url)
-    app = Flask(__name__) 
+    
     @app.route('/callback')
     def callback():
         # Extract the code from the redirect URI
