@@ -66,8 +66,6 @@ class PlaylistGeneratorGUI:
 
         if self.generate_button:
             self.generate_playlists()
-            
-            @st.cache
             self.callback()
             
     def callback(self):
