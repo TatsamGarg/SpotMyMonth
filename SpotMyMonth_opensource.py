@@ -66,8 +66,6 @@ class PlaylistGeneratorGUI:
 
         if self.generate_button:
             self.generate_playlists()
-            
-    def callback(self):
         
     def generate_playlists(self):
         # Set up client credentials
