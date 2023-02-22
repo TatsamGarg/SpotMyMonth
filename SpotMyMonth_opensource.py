@@ -80,11 +80,11 @@ class PlaylistGeneratorGUI:
         USERNAME = self.username_input
         
         # Set up authentication
-        auth_manager = SpotifyOAuth(client_id='your-client-id', client_secret='your-client-secret', redirect_uri='your-redirect-uri', scope='your-scope')
+        #auth_manager = SpotifyOAuth(client_id='your-client-id', client_secret='your-client-secret', redirect_uri='your-redirect-uri', scope='your-scope')
          # Redirect the user to the Spotify authorization page
         #auth_url = auth_manager.get_authorize_url()
         #st.write(auth_url)
-        sp = spotipy.Spotify(auth_manager=auth_manager)
+        #sp = spotipy.Spotify(auth_manager=auth_manager)
 
         # Define a function to get the Spotify client
         @st.cache(allow_output_mutation=True)
@@ -98,7 +98,7 @@ class PlaylistGeneratorGUI:
         # Define a function to get the access token
         @st.cache(allow_output_mutation=True)
         def get_access_token():
-            auth_manager = SpotifyOAuth(client_id='your-client-id', client_secret='your-client-secret', redirect_uri='your-redirect-uri', scope='your-scope')
+            #auth_manager = SpotifyOAuth(client_id='your-client-id', client_secret='your-client-secret', redirect_uri='your-redirect-uri', scope='your-scope')
             return auth_manager.get_cached_token()['access_token']
 
         # Get the access token
