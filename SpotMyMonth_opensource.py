@@ -12,6 +12,7 @@ import spotipy
 import spotipy.util as util
 from spotipy.oauth2 import SpotifyOAuth
 from datetime import datetime, timedelta
+from flask import Flask, request
 import os
 
 class PlaylistGeneratorGUI:
@@ -85,6 +86,19 @@ class PlaylistGeneratorGUI:
         # Redirect the user to the Spotify authorization page
         auth_url = auth_manager.get_authorize_url()
         st.write(auth_url)
+        
+    @app.route('/callback')
+    def callback():
+        # Extract the code from the redirect URI
+        code = request.args.get('code')
+
+        # Use the code to get an access token
+        token_info = auth_manager.get_access_token(code=code)
+
+        # Use the access token to make API requests
+        sp = spotipy.Spotify(auth_manager=auth_manager)
+
+        # Do something with the Spotify API
 
         # get the start and end months from the inputs
         start_month_str = self.start_month_input
@@ -149,5 +163,6 @@ class PlaylistGeneratorGUI:
                 st.write(f"Playlist '{playlist_name}' created with {len(track_uris)} tracks!")
 
 if __name__ == "__main__":
+    app = Flask(__name__)
     playlist_generator_gui = PlaylistGeneratorGUI()
     playlist_generator_gui.run()
