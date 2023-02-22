@@ -12,7 +12,6 @@ import spotipy
 import spotipy.util as util
 from spotipy.oauth2 import SpotifyOAuth
 from datetime import datetime, timedelta
-from flask import Flask, request
 import os
 
 class PlaylistGeneratorGUI:
@@ -21,7 +20,6 @@ class PlaylistGeneratorGUI:
         self.start_month_input = None
         self.end_month_input = None
         self.generate_button = None
-        self.app = Flask(__name__) 
         
     def run(self):
 
@@ -68,7 +66,8 @@ class PlaylistGeneratorGUI:
 
         if self.generate_button:
             self.generate_playlists()
-            # @self.app.route('/callback')    
+            
+            @st.cache
             def callback(self):
                 # Extract the code from the redirect URI
                 code = request.args.get('code')
