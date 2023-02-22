@@ -80,7 +80,7 @@ class PlaylistGeneratorGUI:
         USERNAME = self.username_input
 
         # Set up the authentication object
-        auth_manager = Spotify0Auth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=SCOPE)
+        auth_manager = SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=SCOPE)
 
         # Redirect the user to the Spotify authorization page
         auth_url = auth_manager.get_authorize_url()
