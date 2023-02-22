@@ -79,11 +79,12 @@ class PlaylistGeneratorGUI:
         # Replace this with the Spotify username of the user you are making requests on behalf of
         USERNAME = self.username_input
 
-        # Redirect the user to the Spotify authorization page
-        token = util.prompt_for_user_token(USERNAME, SCOPE, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI) # this makes a .cache file
+        # Set up the authentication object
+        auth_manager = Spotify0Auth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=SCOPE)
 
-        # Use the token to make API requests
-        sp = spotipy.Spotify(auth=token)
+        # Redirect the user to the Spotify authorization page
+        auth_url = auth_manager.get_authorize_url()
+        st.write(auth_url)
 
         # get the start and end months from the inputs
         start_month_str = self.start_month_input
