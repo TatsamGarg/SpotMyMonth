@@ -13,7 +13,6 @@ import spotipy.util as util
 from spotipy.oauth2 import SpotifyOAuth
 from datetime import datetime, timedelta
 import os
-#import callback
 
 class PlaylistGeneratorGUI:
     def __init__(self):
@@ -23,17 +22,10 @@ class PlaylistGeneratorGUI:
         self.generate_button = None
 
     def run(self):
-        #st.sidebar.title("Navigation")
-        #app_mode = st.sidebar.selectbox("Choose a page", ["Homepage", "Callback"])
-        #if app_mode == "Homepage":
-            # Display your app's homepage
-       #     pass
-       # elif app_mode == "Callback":
-            # Display the callback page
-        #    callback.callback()
-            
-            
+
         st.title(":green[SpotMyMonth] :fallen_leaf:")
+        
+
         st.markdown("<h2 style='text-align: left; font-size: 30px; color: white;'> Playlist Generator </h2>", unsafe_allow_html=True)
         
         st.write("") # Add a blank line here
@@ -80,35 +72,18 @@ class PlaylistGeneratorGUI:
         CLIENT_ID = os.environ.get('CLIENT_ID')
         CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
         REDIRECT_URI = os.environ.get('REDIRECT_URI')
-        
+     
         # Define the scope of the permissions you need
         SCOPE = 'user-library-read playlist-modify-public'
 
         # Replace this with the Spotify username of the user you are making requests on behalf of
         USERNAME = self.username_input
 
-        # Check if we have a Spotify access token
-        while 'spotify_token' not in st.session_state:
-            # If not, create a link that the user can click to authenticate with Spotify
-            sp_oauth = SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=SCOPE)
-            # Obtain authorization URL
-            auth_url = sp_oauth.get_authorize_url()
-            st.write(f'<a href="{auth_url}">Click here to authenticate with Spotify</a>', unsafe_allow_html=True)
-            st.write(auth_url)
+        # Redirect the user to the Spotify authorization page
+        token = util.prompt_for_user_token(USERNAME, SCOPE, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI) # this makes a .cache file
 
-            # Wait for the user to click the link and be redirected
-            params = st.experimental_get_query_params()
-            if 'code' in params:
-                # Use the authorization code to retrieve an access token
-                code = params['code'][0]
-                token = sp_oauth.get_access_token(code)
-                st.session_state['spotify_token'] = token
-                st.write("Authenticated successfully!")
-       
-        # If we already have a Spotify access token, use it to make API requests
-        sp = spotipy.Spotify(auth=st.session_state['spotify_token'])
-        st.write("Authenticated with saved token!")
-
+        # Use the token to make API requests
+        sp = spotipy.Spotify(auth=token)
 
         # get the start and end months from the inputs
         start_month_str = self.start_month_input
