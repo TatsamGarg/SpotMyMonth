@@ -66,18 +66,48 @@ class PlaylistGeneratorGUI:
 
         if self.generate_button:
             self.generate_playlists()
-            self.callback()
             
     def callback(self):
-        # Extract the code from the redirect URI
-        code = request.args.get('code')
+        
+    def generate_playlists(self):
+        # Set up client credentials
+        CLIENT_ID = os.environ.get('CLIENT_ID')
+        CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
+        REDIRECT_URI = os.environ.get('REDIRECT_URI')
+     
+        # Define the scope of the permissions you need
+        SCOPE = 'user-library-read playlist-modify-public'
 
-        # Use the code to get an access token
-        token_info = auth_manager.get_access_token(code=code)
-
-        # Use the access token to make API requests
+        # Replace this with the Spotify username of the user you are making requests on behalf of
+        USERNAME = self.username_input
+        
+        # Set up authentication
+        auth_manager = SpotifyOAuth(client_id='your-client-id', client_secret='your-client-secret', redirect_uri='your-redirect-uri', scope='your-scope')
+         # Redirect the user to the Spotify authorization page
+        #auth_url = auth_manager.get_authorize_url()
+        #st.write(auth_url)
         sp = spotipy.Spotify(auth_manager=auth_manager)
 
+        # Define a function to get the Spotify client
+        @st.cache(allow_output_mutation=True)
+        def get_spotify_client():
+            auth_manager = SpotifyOAuth(client_id='your-client-id', client_secret='your-client-secret', redirect_uri='your-redirect-uri', scope='your-scope')
+            return spotipy.Spotify(auth_manager=auth_manager)
+
+        # Get the Spotify client
+        spotify = get_spotify_client()
+
+        # Define a function to get the access token
+        @st.cache(allow_output_mutation=True)
+        def get_access_token():
+            auth_manager = SpotifyOAuth(client_id='your-client-id', client_secret='your-client-secret', redirect_uri='your-redirect-uri', scope='your-scope')
+            return auth_manager.get_cached_token()['access_token']
+
+        # Get the access token
+        access_token = get_access_token()
+
+        # Use the access token to make API requests
+        sp = spotipy.Spotify(auth=access_token)
         # Do something with the Spotify API
 
         # get the start and end months from the inputs
@@ -142,24 +172,6 @@ class PlaylistGeneratorGUI:
                 sp.user_playlist_add_tracks(user=sp.me()['id'], playlist_id=playlist['id'], tracks=track_uris)
                 st.write(f"Playlist '{playlist_name}' created with {len(track_uris)} tracks!") 
 
-    def generate_playlists(self):
-        # Set up client credentials
-        CLIENT_ID = os.environ.get('CLIENT_ID')
-        CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
-        REDIRECT_URI = os.environ.get('REDIRECT_URI')
-     
-        # Define the scope of the permissions you need
-        SCOPE = 'user-library-read playlist-modify-public'
-
-        # Replace this with the Spotify username of the user you are making requests on behalf of
-        USERNAME = self.username_input
-
-        # Set up the authentication object
-        auth_manager = SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=SCOPE)
-
-        # Redirect the user to the Spotify authorization page
-        auth_url = auth_manager.get_authorize_url()
-        st.write(auth_url)
        
 if __name__ == "__main__":
     playlist_generator_gui = PlaylistGeneratorGUI()
