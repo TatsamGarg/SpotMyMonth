@@ -86,7 +86,7 @@ class PlaylistGeneratorGUI:
         # Redirect the user to the Spotify authorization page
         auth_url = auth_manager.get_authorize_url()
         st.write(auth_url)
-        
+    app = Flask(__name__) 
     @app.route('/callback')
     def callback():
         # Extract the code from the redirect URI
@@ -163,6 +163,5 @@ class PlaylistGeneratorGUI:
                 st.write(f"Playlist '{playlist_name}' created with {len(track_uris)} tracks!")
 
 if __name__ == "__main__":
-    app = Flask(__name__)
     playlist_generator_gui = PlaylistGeneratorGUI()
     playlist_generator_gui.run()
