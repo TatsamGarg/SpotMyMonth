@@ -1,3 +1,5 @@
 spotipy==2.22.1
 streamlit==1.18.1
 tkcalendar==1.6.1
+Flask
+requests
